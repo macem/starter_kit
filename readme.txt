@@ -24,3 +24,8 @@ app is available from folder /target/app
 run unit tests from cmd 'frontend-test.sh'
 
 run coverage from cmd 'frontend-coverage.sh'
+then we can open graph from coverage\PhantomJS 1.9.1 (Windows 7 0.0.0)\index.html
+
+5. Developer environment:
+---------------------------------------
+open with sublime text editor file syngular.sublime-project
