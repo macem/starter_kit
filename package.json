@@ -1,0 +1,43 @@
+{
+  "name": "syngular",
+  "description": "Synergy on angular applications",
+  "main": "index.js",
+  "repository": "",
+  "author": "",
+  "license": "",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-compass": "latest",
+    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-http-server": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-htmlmin": "latest",
+    "grunt-contrib-imagemin": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-usemin": "latest",
+    "grunt-minified": "latest",
+    "grunt-svgmin": "latest",
+    "grunt-rev": "latest",
+    "grunt-karma": "latest",
+    "grunt-open": "latest",
+    "grunt-concurrent": "latest",
+    "matchdep": "latest",
+    "connect-livereload": "latest",
+    "grunt-google-cdn": "latest",
+    "grunt-ngmin": "latest",
+    "grunt-angular-templates": "latest",
+    "grunt-contrib-coffee": "latest",
+    "grunt-ngdocs": "latest",
+    "grunt-githooks": "latest",
+    "karma": "latest",
+    "karma-coverage": "latest"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  }
+}
