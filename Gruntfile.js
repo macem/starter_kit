@@ -12,8 +12,8 @@ module.exports = function(grunt) {
 
   var yeomanConfig = {
     name: require('./bower.json').name + 'App',
-    app: 'app',
-    dist: 'dist',
+    app: 'starterApp',
+    src: 'starter/app',
     tmp: '.tmp',
     // copy to target server
     target: 'target/app'
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
       },
       jsFiles: {
         files: [
-          'starter/app/scripts/**/*.js'
+          '<%= yeoman.src %>/app/scripts/**/*.js'
         ],
         options: {
           livereload: LIVERELOAD_PORT
@@ -69,7 +69,7 @@ module.exports = function(grunt) {
     },
     concat: {
       server: {
-        src: ['starter/app/scripts/**/*.js', '<%= yeoman.tmp %>/scripts/templateCache.js'],
+        src: ['<%= yeoman.src %>/scripts/**/*.js', '<%= yeoman.tmp %>/scripts/templateCache.js'],
         dest: '<%= yeoman.target %>/scripts.js'
       },
       modulesCss: {
@@ -115,7 +115,7 @@ module.exports = function(grunt) {
           'bower_components/**/*.eot',
           'bower_components/**/*.ttf',
           'rest/*',
-          'starter/app/images/*.*'
+          '<%= yeoman.src %>/images/*.*'
         ]
       },
       modules: {
@@ -138,7 +138,7 @@ module.exports = function(grunt) {
       server: {
         expand: true,
         dot: true,
-        cwd: 'starter/app',
+        cwd: '<%= yeoman.src %>',
         dest: '<%= yeoman.tmp %>',
         src: [
           '*.html',
@@ -157,18 +157,18 @@ module.exports = function(grunt) {
       }
     },
     'http-server': {
-        dev: {
-            root: '.tmp/',
-            port: 9000,
-            host: "localhost",
-            //cache: <sec>,
-            showDir : true,
-            autoIndex: true,
-            // server default file extension
-            ext: "html",
-            runInBackground: true,
-            openBrowser : true
-        }
+      dev: {
+        root: '.tmp/',
+        port: 9000,
+        host: "localhost",
+        //cache: <sec>,
+        showDir : true,
+        autoIndex: true,
+        // server default file extension
+        ext: "html",
+        runInBackground: true,
+        openBrowser : true
+      }
     },
     clean: {
       server: '<%= yeoman.tmp %>'
@@ -179,73 +179,45 @@ module.exports = function(grunt) {
         ignores: []
       },
       all: [
-        'starter/app/scripts/**/*.js'
+        '<%= yeoman.src %>/scripts/**/*.js'
       ]
     },
     compass: {
       server: {
         options: {
-          sassDir: 'starter/app/styles',
+          sassDir: '<%= yeoman.src %>/styles',
           cssDir: '<%= yeoman.tmp %>/styles',
           //raw: 'Encoding.default_external = \'utf-8\'\n',
-          generatedImagesDir: '<%= yeoman.tmp %>/starter/app/images/generated',
-          imagesDir: 'starter/images',
-          javascriptsDir: 'starter/app/scripts',
+          //generatedImagesDir: '<%= yeoman.tmp %>/<%= yeoman.src %>/images/generated',
+          imagesDir: '<%= yeoman.src %>/images',
+          javascriptsDir: '<%= yeoman.src %>/scripts',
           //fontsDir: module.location + '/app/styles/fonts',
-          importPath: 'bower_components',
+          importPath: '<%= yeoman.src %>/styles',
           httpImagesPath: '/images',
-          httpGeneratedImagesPath: '/images/generated',
+          environment: 'development',
+          outputStyle: 'compressed',
+          //httpGeneratedImagesPath: '/images/generated',
           //httpFontsPath: '/styles/fonts',
+          debugInfo: true,
           relativeAssets: true
         }
       }
     },
-    concurrent: {
-      server: [
-        'compass'
-      ],
-      dist: [
-        'compass',
-        'imagemin',
-        'svgmin',
-        'htmlmin'
-      ]
-    },
+    // angular templates compile to js
     ngtemplates: {
       server: {
         options: {
-          base: 'starter/app',
-          module: 'starterApp'
+          htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
+          module: yeomanConfig.app
         },
-        src: 'starter/app/views/**/*.html',
+        cwd: '<%= yeoman.src %>/',
+        src: 'views/**/*.html',
         dest: '<%= yeoman.tmp %>/scripts/templateCache.js'
       }
-    },
-    /*karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        singleRun: true
-      }
-    },
-    ngdocs: {
-      options: {
-        dest: '<%= yeoman.dist %>/docs',
-        title: 'API Documentation',
-        scripts: [
-          '../bower_components/angular/angular.min.js',
-          '../bower_components/angular-route/angular-route.js',
-          '../bower_components/angular-resource/angular-resource.js',
-          '../bower_components/angular-sanitize/angular-sanitize.js',
-          '../bower_components/angular-ui-bootstrap-bower/ui-bootstrap.js',
-          '../bower_components/angular-ui-select/dist/select.js',
-          '../starter/app/scripts/app.js'
-        ],
-        html5Mode: false
-      },
-      all: jsFilesArray
-    }*/
+    }
   });
 
+  // run frontend environment with app
   grunt.registerTask('server', function(target) {
 
     grunt.task.run([
@@ -260,6 +232,7 @@ module.exports = function(grunt) {
     ]);
   });
 
+  // build production app
   grunt.registerTask('build', [
     'clean:server',
     'copy:modules',

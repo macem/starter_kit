@@ -1,26 +1,19 @@
 # Dependencies
 node_modules
 bower_components
-# Idea
-.idea
-**/*.iml
-# Vim
-*.swo
-*.swp
-.lvimrc
+
 # Sublime
 *.sublime-project
 *.sublime-workspace
+
 # npm
 npm-debug.log
+
 # build
 .sass-cache/
 .tmp/
 dist
 *.css
+
+# tests
 coverage
-test-results.xml
-atlassian-ide-plugin.xml
-# vagrant
-.vagrant
-Vagrantfile
