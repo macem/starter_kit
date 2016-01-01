@@ -1,7 +1,13 @@
 @charset "UTF-8";
 
-$font-small: 0.75em;
+$font-color: #555;
 
-body {
-  color: #555;
+body * {
+  color: $font-color;
+}
+
+body .btn-default,
+body .panel-default > .panel-heading,
+body .navbar-default {
+  background-image: none;
 }

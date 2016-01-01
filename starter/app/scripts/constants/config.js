@@ -1,8 +1,8 @@
 'use strict';
 
 /**
- * @ngdoc directive
- * @name starterApp.constant:Config
+ * @ngdoc global config
+ * @name starterApp.global:Config
  * @description
  * starterApp configuration file
  */

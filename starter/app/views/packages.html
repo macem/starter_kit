@@ -1,0 +1,50 @@
+<div ng-include src="'views/partials/menu.html'"></div>
+<div ng-include src="'views/partials/modal.html'"></div>
+
+<div class="container">
+  <h2>UI Bootstrap</h2>
+  <h3>Accordions</h3>
+  <uib-accordion close-others="accordion">
+    <uib-accordion-group heading="Static Header, initially expanded" is-open="true">
+      This content is straight in the template.
+    </uib-accordion-group>
+    <uib-accordion-group heading="Static Header">
+      This content
+    </uib-accordion-group>
+  </uib-accordion>
+
+  <h3>Carousel</h3>
+  <uib-carousel>
+    <uib-slide ng-repeat="slide in slides">
+      <img ng-src="{{slide.image}}" style="margin:auto;">
+      <div class="carousel-caption">
+        <h4>Slide {{$index}}</h4>
+        <p>{{slide.text}}</p>
+      </div>
+    </uib-slide>
+  </uib-carousel>
+
+  <h3>Popover</h3>
+  <button popover-placement="top" uib-popover="On the Top!" type="button" class="btn btn-default">Top</button>
+  <button popover-placement="left" uib-popover="On the Left!" type="button" class="btn btn-default">Left</button>
+  <button popover-placement="right" uib-popover="On the Right!" type="button" class="btn btn-default">Right</button>
+  <button popover-placement="bottom" uib-popover="On the Bottom!" type="button" class="btn btn-default">Bottom</button>
+
+  <h3>Rating</h3>
+  <uib-rating ng-model="rate" max="10" readonly="isReadonly" titles="['one','two','three']" aria-labelledby="default-rating"></uib-rating>
+
+  <h3>Tabs</h3>
+  <uib-tabset>
+    <uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}">
+      {{tab.content}}
+    </uib-tab>
+  </uib-tabset>
+
+  <h3>Alert</h3>
+  <uib-alert ng-repeat="alert in alerts">{{alert.text}}</uib-alert>
+  <button type="button" class='btn btn-default' ng-click="addAlert()">Add Alert</button>
+
+  <h3>Modal</h3>
+  <button type="button" class="btn btn-default" ng-click="openModal()">Open me!</button>
+
+</div>

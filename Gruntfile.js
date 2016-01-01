@@ -1,14 +1,16 @@
-// Generated on 2013-08-27 using generator-angular 0.3.1
+// Generated on 2015-12-28
 'use strict';
+
 var LIVERELOAD_PORT = 35729;
-var lrSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT });
+var lrSnippet = require('connect-livereload')({
+  port: LIVERELOAD_PORT
+});
 var mountFolder = function(connect, dir) {
   return connect.static(require('path').resolve(dir));
 };
 
 module.exports = function(grunt) {
-  // load all grunt tasks
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  require('time-grunt')(grunt);
 
   var yeomanConfig = {
     name: require('./bower.json').name + 'App',
@@ -30,41 +32,37 @@ module.exports = function(grunt) {
     yeoman: yeomanConfig,
     watch: {
       options: {
-        interval: 10000,
-        debounceDelay: 500
+        livereload: true,
+        spawn: false,
+        interval: 5007
       },
       compass: {
         files: [
-          '**/app/styles/**/*.{scss,sass}'
+          '<%= yeoman.src %>/styles/**/*.{scss,sass}'
         ],
-        tasks: ['compass']
-      },
-      ngtemplates: {
-        files: [
-          '**/app/views/**/*.html'
-        ],
+        tasks: ['compass'],
         options: {
           livereload: LIVERELOAD_PORT
-        },
-        tasks: ['ngtemplates']
+        }
       },
       jsFiles: {
         files: [
-          '<%= yeoman.src %>/app/scripts/**/*.js'
+          '<%= yeoman.src %>/scripts/*.js',
+          '<%= yeoman.src %>/scripts/**/*.js'
         ],
         options: {
-          livereload: LIVERELOAD_PORT
+          livereload: true
         },
-        tasks: ['jshint', 'copy:server']
+        tasks: ['newer:jshint', 'newer:copy:serverjs']
       },
-      livereload: {
-        options: {
-          livereload: LIVERELOAD_PORT
-        },
+      ngtemplates: {
         files: [
-          '{<%= yeoman.tmp %>/,}**/styles/**/*.css',
-          '{<%= yeoman.tmp %>/,}**/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
-        ]
+          '<%= yeoman.src %>/views/**/*.html'
+        ],
+        options: {
+          livereload: true
+        },
+        tasks: ['newer:ngtemplates']
       }
     },
     concat: {
@@ -72,17 +70,19 @@ module.exports = function(grunt) {
         src: ['<%= yeoman.src %>/scripts/**/*.js', '<%= yeoman.tmp %>/scripts/templateCache.js'],
         dest: '<%= yeoman.target %>/scripts.js'
       },
-      modulesCss: {
+      modulescss: {
         src: [
-          'bower_components/angular-notify/dist/angular-notify.min.css',
-          'bower_components/angular-ui-select/dist/select.min.css',
-          'bower_components/angular-loading-bar/build/loading-bar.min.css',
+          //'bower_components/angular-notify/dist/angular-notify.min.css',
+          //'bower_components/angular-ui-select/dist/select.min.css',
+          //'bower_components/angular-loading-bar/build/loading-bar.min.css',
+          '<%= yeoman.tmp %>/styles/main.css',
           'bower_components/bootstrap/dist/css/bootstrap.min.css',
-          'bower_components/angular-xeditable/dist/css/xeditable.css'
+          'bower_components/bootstrap/dist/css/bootstrap-theme.min.css'
+          //'bower_components/angular-xeditable/dist/css/xeditable.css'
         ],
-        dest: '<%= yeoman.target %>/styles/modules.css'
+        dest: '<%= yeoman.target %>/styles/all.css'
       },
-      modules: {
+      modulesjs: {
         src: [
           /*'bower_components/angular/angular.js',
           'bower_components/angular-resource/angular-resource.js',
@@ -91,12 +91,35 @@ module.exports = function(grunt) {
           'bower_components/jquery/dist/jquery.min.js',
           'bower_components/bootstrap/dist/js/bootstrap.min.js',
           'bower_components/underscore/underscore-min.js',
-          'bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js',
-          'bower_components/ng-tasty/ng-tasty-tpls.js',
-          'bower_components/angular-ui-select/dist/select.js'
+          'bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js'
+          //'bower_components/ng-tasty/ng-tasty-tpls.js',
+          //'bower_components/angular-ui-select/dist/select.js'
         ],
-        dest: '<%= yeoman.target %>/modules.js'
+        dest: '<%= yeoman.target %>/all.js'
       },
+    },
+    packit: {
+      options: {
+        attribution: true,
+        base62: true,
+        shrink: true
+      },
+      target: { //target
+        options: {  //default options
+          pack: true,
+          banners: true,
+          action: 'write',
+          dest: '<%= yeoman.target %>/all.min.js'
+        },
+        files: [
+          {
+            cwd: '<%= yeoman.target %>',
+            src: 'all.js',
+            expand: true,
+            flatten: true
+          }
+        ]
+      }
     },
     copy: {
       build: {
@@ -114,9 +137,30 @@ module.exports = function(grunt) {
           'bower_components/**/*.svg',
           'bower_components/**/*.eot',
           'bower_components/**/*.ttf',
-          'rest/*',
-          '<%= yeoman.src %>/images/*.*'
+          'rest/*'
         ]
+      },
+      buildimage: {
+        expand: true,
+        dot: true,
+        cwd: '<%= yeoman.src %>',
+        dest: '<%= yeoman.target %>',
+        src: [
+          'images/**/*.*'
+          ]
+      },
+      buildfont: {
+        expand: true,
+        flatten: true,
+        dot: true,
+        cwd: 'bower_components',
+        dest: '<%= yeoman.target %>/fonts/',
+        src: [
+          '**/*.woff2',
+          '**/*.woff',
+          '**/*.eot',
+          '**/*.ttf'
+          ]
       },
       modules: {
         expand: true,
@@ -135,15 +179,21 @@ module.exports = function(grunt) {
           'bower_components/**/*.ttf'
         ]
       },
-      server: {
+      serverjs: {
+        expand: true,
+        dot: true,
+        cwd: '<%= yeoman.src %>',
+        dest: '<%= yeoman.tmp %>',
+        src: ['scripts/**/*.js']
+      },
+      serverother: {
         expand: true,
         dot: true,
         cwd: '<%= yeoman.src %>',
         dest: '<%= yeoman.tmp %>',
         src: [
           '*.html',
-          'images/**/*.*',
-          'scripts/**/*.js'
+          'images/**/*.*'
         ]
       },
       rest: {
@@ -164,14 +214,20 @@ module.exports = function(grunt) {
         //cache: <sec>,
         showDir : true,
         autoIndex: true,
+        logFn: function(req, res, error) { },
         // server default file extension
         ext: "html",
-        runInBackground: true,
-        openBrowser : true
+        runInBackground: true//,
+        //openBrowser : true
       }
     },
     clean: {
-      server: '<%= yeoman.tmp %>'
+      server: '<%= yeoman.tmp %>',
+      build: [
+        '<%= yeoman.target %>/styles',
+        '<%= yeoman.target %>/fonts',
+        '<%= yeoman.target %>/images'
+      ]
     },
     jshint: {
       options: {
@@ -191,13 +247,13 @@ module.exports = function(grunt) {
           //generatedImagesDir: '<%= yeoman.tmp %>/<%= yeoman.src %>/images/generated',
           imagesDir: '<%= yeoman.src %>/images',
           javascriptsDir: '<%= yeoman.src %>/scripts',
-          //fontsDir: module.location + '/app/styles/fonts',
+          fontsDir: '<%= yeoman.src %>/styles/fonts',
           importPath: '<%= yeoman.src %>/styles',
           httpImagesPath: '/images',
           environment: 'development',
           outputStyle: 'compressed',
           //httpGeneratedImagesPath: '/images/generated',
-          //httpFontsPath: '/styles/fonts',
+          httpFontsPath: '/fonts',
           debugInfo: true,
           relativeAssets: true
         }
@@ -207,15 +263,35 @@ module.exports = function(grunt) {
     ngtemplates: {
       server: {
         options: {
-          htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
+          /*htmlmin:  {
+            removeComments: true,
+            collapseWhitespace: true,
+            collapseBooleanAttributes: true
+          },*/
+          url: function(url) {
+            return url.replace('starter/app/', '');
+          },
           module: yeomanConfig.app
         },
-        cwd: '<%= yeoman.src %>/',
-        src: 'views/**/*.html',
+        //cwd: '<%= yeoman.src %>/',
+        src: '<%= yeoman.src %>/views/**/*.html',
         dest: '<%= yeoman.tmp %>/scripts/templateCache.js'
       }
     }
   });
+
+  // Load JSHint task
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-http-server');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-packitjs');
+  grunt.loadNpmTasks('grunt-angular-templates');
+  grunt.loadNpmTasks('grunt-newer');
+  grunt.loadNpmTasks('grunt-minified');
 
   // run frontend environment with app
   grunt.registerTask('server', function(target) {
@@ -223,7 +299,7 @@ module.exports = function(grunt) {
     grunt.task.run([
       'clean:server',
       'copy:modules',
-      'copy:server',
+      'copy:serverjs', 'copy:serverother',
       'copy:rest',
       'ngtemplates',
       'compass',
@@ -234,13 +310,16 @@ module.exports = function(grunt) {
 
   // build production app
   grunt.registerTask('build', [
-    'clean:server',
+    'clean:build',
     'copy:modules',
-    'copy:server',
+    'copy:serverjs', 'copy:serverother',
     'copy:rest',
     'ngtemplates',
     'compass',
+    'concat',
     'copy:build',
-    'concat'
+    'copy:buildimage',
+    'copy:buildfont',
+    'packit'
   ]);
 };
